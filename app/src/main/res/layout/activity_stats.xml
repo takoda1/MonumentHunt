@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rowCount="4"
+    android:columnCount="1"
+    tools:context="edu.unc.takoda.monumenthunt.StatsActivity">
+
+    <TextView
+        android:text="@string/stats"
+        android:textSize="24sp"
+        android:layout_row="0"
+        android:layout_gravity="center"/>
+
+    <Spinner
+        android:id="@+id/statsSelect"
+        android:layout_row="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="center"
+        android:entries="@array/statsSelection">
+
+    </Spinner>
+
+    <GridLayout
+        android:layout_row="2"
+        android:layout_rowWeight="2"
+        android:layout_gravity="center">
+
+    </GridLayout>
+
+    <Button
+        android:text="@string/backButton"
+        android:layout_row="3"
+        android:layout_rowWeight="1"
+        android:onClick="back"
+        android:layout_gravity="center"/>
+</GridLayout>

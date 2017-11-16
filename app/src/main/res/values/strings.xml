@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">MonumentHunt</string>
+    <string name="app_name">Monument Hunt</string>
+    <string name="stats">Stats</string>
+    <string name="backButton">Back</string>
+
+    <string-array name="statsSelection">
+        <item>Timed Single Player</item>
+        <item>Timed Multi Player</item>
+        <item>Untimed Single Player</item>
+    </string-array>
 </resources>
