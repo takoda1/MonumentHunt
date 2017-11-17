@@ -9,19 +9,21 @@
     tools:context="edu.unc.takoda.monumenthunt.StartMenu">
 
     <TextView
-        android:layout_row="1"
-        android:layout_rowWeight="2"
+        android:layout_row="0"
+        android:layout_rowWeight="1"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
+        android:textSize="24sp"
         />
    <Button
+       android:id="@+id/singleTimed"
        android:layout_row="1"
        android:layout_rowWeight="1"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:onClick="something"
+       android:onClick="startGame"
        android:layout_gravity="center"/>
     <Button
         android:id="@+id/multiTimed"
@@ -29,14 +31,15 @@
         android:layout_row="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="something"
+        android:onClick="startGame"
         android:layout_gravity="center"/>
     <Button
+        android:id="@+id/singleRelax"
         android:layout_rowWeight="1"
         android:layout_row="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="something"
+        android:onClick="startGame"
         android:layout_gravity="center"/>
     <Button
         android:layout_rowWeight="1"

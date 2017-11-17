@@ -13,8 +13,10 @@ public class StartMenu extends AppCompatActivity {
         setContentView(R.layout.activity_start_menu);
     }
 
-    public void something(View v){
-
+    public void startGame(View v){
+        Intent gameIntent = new Intent(this, MainActivity.class);
+        gameIntent.putExtra("Gamemode", v.getId());
+        startActivity(gameIntent);
     }
 
     public void statsButton(View v){

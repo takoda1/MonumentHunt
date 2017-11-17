@@ -2,6 +2,9 @@
     <string name="app_name">Monument Hunt</string>
     <string name="stats">Stats</string>
     <string name="backButton">Back</string>
+    <string name="singleTimed">Single Player Timed</string>
+    <string name="multiTimed">Multi Player Timed</string>
+    <string name="singleRelax">Single Player Relax</string>
 
     <string-array name="statsSelection">
         <item>Timed Single Player</item>
