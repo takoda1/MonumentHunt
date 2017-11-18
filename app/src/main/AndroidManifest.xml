@@ -19,5 +19,6 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".StatsActivity"></activity>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 
 </manifest>

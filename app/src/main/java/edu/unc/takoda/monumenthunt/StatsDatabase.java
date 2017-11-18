@@ -8,5 +8,5 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class StatsDatabase {
     private SQLiteDatabase db;
-    
+
 }
