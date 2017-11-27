@@ -16,8 +16,7 @@ public class MonumentData {
     private static List<Monument> monuments = new ArrayList<Monument>();
 
     public MonumentData(){
-
-       //monuments.add(new Monument("Old Well", .13, .13, R.drawable));
+        monuments.add(new Monument("Old Well", 35.91205448, -79.05123889, R.drawable.oldwell));
         /*for(int i = 0; i < names.length; i++){
             monuments.add(new Monument(names[i], latitudes[i], longitutdes[i], drawableIDs[i]));
         }*/

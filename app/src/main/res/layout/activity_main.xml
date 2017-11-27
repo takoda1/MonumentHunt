@@ -8,11 +8,33 @@
     tools:context="edu.unc.takoda.monumenthunt.MainActivity">
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/arrow" />
+
+        <ImageView
+            android:id="@+id/north"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/north"/>
+    </LinearLayout>
+
+
+
     <ImageView
-        android:id="@+id/arrow"
+        android:id="@+id/monumentImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:src="@drawable/greenarrow" />
+        android:layout_gravity="center"/>
 
 </LinearLayout>

@@ -13,7 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements
     public final double EarthRadius = 6371000;
     private final double monumentReachedDistance = 10; //in meters
     //endregion
-
     /*Location update called every some time interval
     to update the Location of the closest monument and
     check proximity to closest monument to see if it has been
@@ -54,8 +54,9 @@ public class MainActivity extends AppCompatActivity implements
 
     private MonumentData mD;
     private List<Monument> monuments;
-    private int closestMonument; //position in monuments list of the closest monument
-    GuidingArrow arrow;
+    private int closestMonument, prevClosestMonument;//position in monuments list of the closest monument and previous closest monument
+    private GuidingArrow arrow;
+    private ImageView monumentImage;
 
     private int monumentsFound;
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestFineLocation);
         }
 
-        arrow = new GuidingArrow(findViewById(R.id.arrow));
+        arrow = new GuidingArrow(findViewById(R.id.arrow), findViewById(R.id.north));
 
         if(locationProvider == null)
             locationProvider = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements
 
         mD = new MonumentData();
         monuments = mD.monumentList();
+
+        monumentImage = (ImageView)findViewById(R.id.monumentImage);
+        findClosestMonument();
+        monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
     }
 
     /*
@@ -96,8 +101,13 @@ public class MainActivity extends AppCompatActivity implements
         Longitude = loc.getLongitude();
         findClosestMonument();
         detectClosestMonument();
+        prevClosestMonument = closestMonument;
         Monument temp = monuments.get(closestMonument);
+        //for optimization so that the drawable doesn't have to be set when the image doesn't change
+        if(prevClosestMonument != closestMonument)
+            monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
         arrow.setDestination(temp.getLatitude(), temp.getLongitude());
+        Log.v("Monument", monuments.get(closestMonument).getName());
     }
 
     @Override
@@ -119,7 +129,11 @@ public class MainActivity extends AppCompatActivity implements
     and Longitude to specified latitude and longitude
      */
     private double distanceFromPosition(double latitude, double longitude){
-        double a = Math.pow(Math.sin((Latitude - latitude) / 2.0), 2) + Math.cos(Latitude) * Math.cos(latitude) * Math.pow(Math.sin((Longitude - longitude) / 2.0), 2);
+        double lat1 = Math.toRadians(Latitude);
+        double lat2 = Math.toRadians(latitude);
+        double deltaLat = Math.toRadians(latitude - Latitude);
+        double deltaLong = Math.toRadians(longitude - Longitude);
+        double a = Math.pow(Math.sin(deltaLat / 2.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLong / 2.0), 2);
         return EarthRadius * 2 * Math.atan2(Math.pow(a, .5), Math.pow(1 - a, .5));
     }
 
@@ -155,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements
     //Interval at which GPS location is updated for *this* listener, 5 seconds for now
     private void initializeAccurateLocationRequest(){
         accurateLocReq = new LocationRequest();
-        accurateLocReq.setInterval(5000);
-        accurateLocReq.setFastestInterval(4000);
+        accurateLocReq.setInterval(1000);
+        accurateLocReq.setFastestInterval(1000);
         accurateLocReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
