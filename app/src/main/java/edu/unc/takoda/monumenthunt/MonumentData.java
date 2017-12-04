@@ -34,7 +34,6 @@ public class MonumentData {
                 -79.049770, R.drawable.fountain));
         monuments.add(new Monument("Memorial to Founding Trustees", 35.912540 , -79.052480, R.drawable.founders));
 
-
         /*for(int i = 0; i < names.length; i++){
             monuments.add(new Monument(names[i], latitudes[i], longitutdes[i], drawableIDs[i]));
         }*/

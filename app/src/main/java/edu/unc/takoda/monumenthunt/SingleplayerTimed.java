@@ -46,7 +46,6 @@ public class SingleplayerTimed extends Game {
     }
 
     private void storeData(){
-        StatsDatabase sdb = new StatsDatabase();
-        sdb.storeTimedData(monumentsFound);
+        db.execSQL("INSERT INTO SinglePlayerTimed VALUES(datetime('now'), '" + monumentsFound +"')");
     }
 }

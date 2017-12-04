@@ -8,7 +8,6 @@
 
     <string-array name="statsSelection">
         <item>Timed Single Player</item>
-        <item>Timed Multi Player</item>
         <item>Untimed Single Player</item>
     </string-array>
 </resources>

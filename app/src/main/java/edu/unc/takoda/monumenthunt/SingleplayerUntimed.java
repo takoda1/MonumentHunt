@@ -18,7 +18,6 @@ public class SingleplayerUntimed extends Game {
     @Override
     public void backButton(View v) {
         super.backButton(v);
-        StatsDatabase sdb = new StatsDatabase();
-        sdb.storeUnitmedData(monumentsFound);
+        db.execSQL("INSERT INTO SinglePlayerUntimed VALUES(datetime('now'), '" + monumentsFound +"')");
     }
 }

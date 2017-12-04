@@ -3,6 +3,7 @@ package edu.unc.takoda.monumenthunt;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -16,11 +17,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -33,7 +37,7 @@ public class Game extends AppCompatActivity implements
     //region Final Variables
     private final int RequestFineLocation = 1;
     public final double EarthRadius = 6371000;
-    private final double monumentReachedDistance = 10; //in meters
+    private final double monumentReachedDistance = 5; //in meters
     //endregion
     /*Location update called every some time interval
     to update the Location of the closest monument and
@@ -54,12 +58,17 @@ public class Game extends AppCompatActivity implements
     private double Latitude, Longitude;
     private MonumentData mD;
     private List<Monument> monuments;
-    private int closestMonument, prevClosestMonument;//position in monuments list of the closest monument and previous closest monument
+    private int closestMonument;//position in monuments list of the closest monument
+    private int currentImgID, prevImgID;
     private GuidingArrow arrow;
     private ImageView monumentImage;
     private TextView monumentNumberView;
     private TextView monumentDistanceView;
+    private TextView monumentNameView;
     protected int monumentsFound = 0;
+
+    protected static SQLiteDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +93,16 @@ public class Game extends AppCompatActivity implements
         monuments = mD.monumentList();
 
         monumentImage = (ImageView)findViewById(R.id.monumentImage);
+
         findClosestMonument();
-        monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
         monumentNumberView = (TextView)findViewById(R.id.monumentsFound);
         monumentDistanceView = (TextView)findViewById(R.id.distanceView);
+        monumentNameView = (TextView)findViewById(R.id.monumentText);
+        monumentNumberView.setText("Monuments found: 0");
+
+        db = this.openOrCreateDatabase("MyDatabase", MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerUntimed (date TEXT, monumentsFound INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerTimed (date TEXT, monumentsFound INTEGER)");
     }
 
 
@@ -107,14 +122,16 @@ public class Game extends AppCompatActivity implements
     public void onLocationChanged(Location loc){
         Latitude = loc.getLatitude();
         Longitude = loc.getLongitude();
+        prevImgID = currentImgID;
         findClosestMonument();
         detectClosestMonument();
-        prevClosestMonument = closestMonument;
+        currentImgID = monuments.get(closestMonument).getDrawableID();
         Monument temp = monuments.get(closestMonument);
+        if(currentImgID != prevImgID){
+            monumentNameView.setText("Monument: " + temp.getName());
+            monumentImage.setImageDrawable(getResources().getDrawable(temp.getDrawableID()));
+        }
         monumentDistanceView.setText("Distance to monument: " + String.valueOf(distanceFromPosition(temp.getLatitude(), temp.getLongitude())*100/100));
-        //for optimization so that the drawable doesn't have to be set when the image doesn't change
-        if(prevClosestMonument != closestMonument)
-            monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
         arrow.setDestination(temp.getLatitude(), temp.getLongitude());
         Log.v("Monument", temp.getName());
     }
@@ -174,6 +191,7 @@ public class Game extends AppCompatActivity implements
             findClosestMonument();
             monumentsFound++;
             monumentNumberView.setText("Monuments Found: "+monumentsFound);
+            Toast.makeText(this, "Monument Found!", Toast.LENGTH_SHORT).show();
         }
     }
 
