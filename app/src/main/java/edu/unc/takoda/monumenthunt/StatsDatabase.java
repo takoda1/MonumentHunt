@@ -2,67 +2,39 @@ package edu.unc.takoda.monumenthunt;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 
+import java.sql.Date;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by takoda on 11/16/2017.
  */
 
 public class StatsDatabase {
-    private static SQLiteDatabase db;
-    private static StatsDatabase db1;
+    private SQLiteDatabase db;
 
 
     public StatsDatabase(){
-        db=SQLiteDatabase.openOrCreateDatabase("/sdcard/db",null);
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerScore (MonumentID INT PRIMARY KEY, date DATE)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerTimedScore (MonumentID INT, date DATE)");
-        //multiplayer table
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS Monuments(ID INT PRIMARY KEY, Name STRING, Lat FLOAT, Long FLOAT)");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS GameEvents(ID INT PRIMARY KEY, PlayerID INT, TimeOfArrival datetime)");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS Player(ID INT PRIMARY KEY)");
-
-        MonumentData x=new MonumentData();
-
-        ArrayList<Monument> monList = x.monumentList(); //new ArrayList<MonumentData>();
-
-
-
-        for (int i=0;i< monList.size();i++ ){
-            ContentValues row= new ContentValues();
-            row.put("Name",monList.get(i).getName());
-            row.put("Lat",monList.get(i).getLatitude());
-            row.put("Long", monList.get(i).getLongitude());
-
-            db.insert("Monuments",null,row);
-
-            //db.execSQL("INSERT INTO Monuments (Name, Lat, Long)");
-        }
-        //assuming you have a list of monuments found in single
-
 
     }
-    public static void init (){
-        if(db1==null) {
 
-            db1 = new StatsDatabase();
+    public void openDatabase(){
+        db = SQLiteDatabase.openOrCreateDatabase("MyDatabase", null);
 
-
-        }
-
-    }
-    public static StatsDatabase getInstance(){
-        return db1;
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerUntimed (date DATE, monumentsFound INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerTimed (date DATE, monumentsFound INTEGER)");
     }
 
+    public void storeUnitmedData(Date date, int monumentsFound){
+        db.execSQL("INSERT INTO SinglePlayerUntimed VALUES('" + date + "', '" + monumentsFound +"'");
+    }
 
+    public void storeTimedData(Date date, int monumentsFound){
+        db.execSQL("INSERT INTO SinglePlayerTimed VALUES('" + date + "', '" + monumentsFound +"'");
+    }
 
-
-    //db= openOrCreateDatabase("MyDatabase", Context.MODE_PRIVATE,null);
-
+    
 }

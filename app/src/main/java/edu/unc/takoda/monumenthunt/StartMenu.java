@@ -14,7 +14,12 @@ public class StartMenu extends AppCompatActivity {
     }
 
     public void startGame(View v){
-        Intent gameIntent = new Intent(this, MainActivity.class);
+        Intent gameIntent = new Intent();
+        switch(v.getId()){
+            case R.id.singleRelax:
+                gameIntent = new Intent(this, SingleplayerUntimed.class);
+                break;
+        }
         gameIntent.putExtra("Gamemode", v.getId());
         startActivity(gameIntent);
     }

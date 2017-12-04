@@ -1,10 +1,9 @@
 package edu.unc.takoda.monumenthunt;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -14,7 +13,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,7 +24,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
+public class Game extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         com.google.android.gms.location.LocationListener{
@@ -51,15 +52,14 @@ public class MainActivity extends AppCompatActivity implements
     //endregion
 
     private double Latitude, Longitude;
-
     private MonumentData mD;
     private List<Monument> monuments;
     private int closestMonument, prevClosestMonument;//position in monuments list of the closest monument and previous closest monument
     private GuidingArrow arrow;
     private ImageView monumentImage;
-
-    private int monumentsFound;
-
+    private TextView monumentNumberView;
+    private TextView monumentDistanceView;
+    protected int monumentsFound = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,14 @@ public class MainActivity extends AppCompatActivity implements
         monumentImage = (ImageView)findViewById(R.id.monumentImage);
         findClosestMonument();
         monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
+        monumentNumberView = (TextView)findViewById(R.id.monumentsFound);
+        monumentDistanceView = (TextView)findViewById(R.id.distanceView);
+    }
+
+
+    public void backButton(View v){
+        Intent backIntent = new Intent(this, StartMenu.class);
+        startActivity(backIntent);
     }
 
     /*
@@ -103,11 +111,12 @@ public class MainActivity extends AppCompatActivity implements
         detectClosestMonument();
         prevClosestMonument = closestMonument;
         Monument temp = monuments.get(closestMonument);
+        monumentDistanceView.setText("Distance to monument: " + String.valueOf(distanceFromPosition(temp.getLatitude(), temp.getLongitude())));
         //for optimization so that the drawable doesn't have to be set when the image doesn't change
         if(prevClosestMonument != closestMonument)
             monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
         arrow.setDestination(temp.getLatitude(), temp.getLongitude());
-        Log.v("Monument", monuments.get(closestMonument).getName());
+        Log.v("Monument", temp.getName());
     }
 
     @Override
@@ -163,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements
         if(distanceFromPosition(temp.getLatitude(), temp.getLongitude()) < monumentReachedDistance){
             monuments.remove(closestMonument);
             findClosestMonument();
+            monumentsFound++;
+            monumentNumberView.setText("Monuments Found: "+monumentsFound);
         }
     }
 
@@ -181,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements
         fastLocReq.setFastestInterval(100);
         fastLocReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
+
+
 
     //region App status methods that toggle Location Services
     @Override

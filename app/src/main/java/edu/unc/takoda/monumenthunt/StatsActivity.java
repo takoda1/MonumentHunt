@@ -1,5 +1,6 @@
 package edu.unc.takoda.monumenthunt;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     public void back(View v){
-
+        Intent backIntent = new Intent(this, StartMenu.class);
+        startActivity(backIntent);
     }
 }

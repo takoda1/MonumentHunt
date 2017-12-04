@@ -24,9 +24,9 @@ public class MonumentData {
         monuments.add(new Monument("9/11 Memorial", 35.907530, -79.046390, R.drawable.nineeleven));
         monuments.add(new Monument("Bell Tower", 35.9086, -79.0492, R.drawable.belltower));
         monuments.add(new Monument("Thomas Wolfe Memorial", 35.910650,-79.049410,  R.drawable.wolfe));
-        monuments.add(new Monument("Eve Carson Memorial Gardens", 35.910750, -79.0505480, R.drawable.eveCar));
+        monuments.add(new Monument("Eve Carson Memorial Gardens", 35.910750, -79.0505480, R.drawable.evecar));
         monuments.add(new Monument("Carolina Alumni in Memory of those Lost in Military Service",
-                35.911070, -79.052380, R.drawable.vetMemorial));
+                35.911070, -79.052380, R.drawable.vetmemorial));
         monuments.add(new Monument("Playmakers Theatre", 35.9120, -79.0503, R.drawable.playmakers));
         monuments.add(new Monument("Caldwell Monument", 35.913290, -79.052200, R.drawable.oblisk));
         monuments.add(new Monument("Unsung Founders Memorial", 35.913620, -79.052120, R.drawable.unsung));
