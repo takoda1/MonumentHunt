@@ -14,27 +14,29 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class StatsDatabase {
-    private SQLiteDatabase db;
+    private static SQLiteDatabase db;
 
 
     public StatsDatabase(){
-
-    }
-
-    public void openDatabase(){
         db = SQLiteDatabase.openOrCreateDatabase("MyDatabase", null);
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerUntimed (date DATE, monumentsFound INTEGER)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerTimed (date DATE, monumentsFound INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerUntimed (date TEXT, monumentsFound INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS SinglePlayerTimed (date TEXT, monumentsFound INTEGER)");
     }
 
-    public void storeUnitmedData(Date date, int monumentsFound){
-        db.execSQL("INSERT INTO SinglePlayerUntimed VALUES('" + date + "', '" + monumentsFound +"'");
+    public void storeUnitmedData(int monumentsFound){
+        db.execSQL("INSERT INTO SinglePlayerUntimed VALUES(datetime('now'), '" + monumentsFound +"'");
     }
 
-    public void storeTimedData(Date date, int monumentsFound){
-        db.execSQL("INSERT INTO SinglePlayerTimed VALUES('" + date + "', '" + monumentsFound +"'");
+    public void storeTimedData(int monumentsFound){
+        db.execSQL("INSERT INTO SinglePlayerTimed VALUES(datetime('now'), '" + monumentsFound +"'");
     }
 
-    
+    public Cursor getUntimedDataCursor(){
+        return db.rawQuery("SELECT S.date, S.monumentsFound FROM SinglePlayerUntimed", null);
+    }
+
+    public Cursor getTimedDataCursor(){
+        return db.rawQuery("SELECT S.date, S.monumentsFound FROM SinglePlayerTimed", null);
+    }
 }

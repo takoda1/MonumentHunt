@@ -1,5 +1,6 @@
 package edu.unc.takoda.monumenthunt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -21,14 +22,17 @@ public class SingleplayerTimed extends Game {
         super.onCreate(savedInstanceState);
         findViewById(R.id.notification).setVisibility(View.INVISIBLE);
         timeView = (TextView) findViewById(R.id.timer);
-        
+
+        final SingleplayerTimed instance = this;
         new CountDownTimer(3600000, 1000){
             public void onTick(long millisUntilFinished) {
                 timeView.setText("Time remaining: " + (millisUntilFinished / 1000));
             }
 
             public void onFinish(){
-
+                storeData();
+                Intent backIntent = new Intent(instance, StartMenu.class);
+                startActivity(backIntent);
             }
         }.start();
 
@@ -38,10 +42,11 @@ public class SingleplayerTimed extends Game {
     @Override
     public void backButton(View v) {
         super.backButton(v);
+        storeData();
     }
 
-
-    private void saveData(){
-
+    private void storeData(){
+        StatsDatabase sdb = new StatsDatabase();
+        sdb.storeTimedData(monumentsFound);
     }
 }

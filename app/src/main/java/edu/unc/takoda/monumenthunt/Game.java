@@ -111,7 +111,7 @@ public class Game extends AppCompatActivity implements
         detectClosestMonument();
         prevClosestMonument = closestMonument;
         Monument temp = monuments.get(closestMonument);
-        monumentDistanceView.setText("Distance to monument: " + String.valueOf(distanceFromPosition(temp.getLatitude(), temp.getLongitude())));
+        monumentDistanceView.setText("Distance to monument: " + String.valueOf(distanceFromPosition(temp.getLatitude(), temp.getLongitude())*100/100));
         //for optimization so that the drawable doesn't have to be set when the image doesn't change
         if(prevClosestMonument != closestMonument)
             monumentImage.setImageDrawable(getResources().getDrawable(monuments.get(closestMonument).getDrawableID()));
